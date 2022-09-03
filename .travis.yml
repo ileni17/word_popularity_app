@@ -1,0 +1,46 @@
+language: php
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+    - $HOME/symfony-bridge/.phpunit
+
+env:
+  global:
+    - SYMFONY_PHPUNIT_DIR=./bin/.phpunit
+    # It will make the tests fail only if a number of deprecation notices is reached
+    - SYMFONY_DEPRECATIONS_HELPER=9
+    - ACTION="install"
+
+matrix:
+  # build will be marked as finished as soon as one of two conditions are met: The only remaining jobs are allowed to fail, or a job has already failed
+  fast_finish: true
+  include:
+    - php: 8.1
+
+before_install:
+  # Remove xdebug (if enabled) when composer is running to improve performance
+  - '[[ "$TRAVIS_PHP_VERSION" == "8.1snapshot" ]] || phpenv config-rm xdebug.ini'
+  - composer self-update
+  # Set memory to max (memory fail)
+  - '[[ "$ACTION" == "install" ]] || echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini'
+  # Set stability to dev
+  - '[[ "$ACTION" == "install" ]] || composer config minimum-stability dev'
+  # Change version of symfony when needed
+  - '[[ "$ACTION" == "install" ]] || composer config extra.symfony.require $SYMFONY'
+
+install:
+  - php -r "echo ini_get('memory_limit').PHP_EOL;"
+  # install or update
+  - composer $ACTION
+  - ./vendor/bin/simple-phpunit install
+
+script:
+  - ./bin/phpunit
+  # this checks that the source code follows the Symfony Code Syntax rules
+  - '[[ "$TRAVIS_PHP_VERSION" == "8.1" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
+  # this checks that the YAML config files contain no syntax errors
+  - ./bin/console lint:yaml config --parse-tags
+  # this checks that Doctrine's mapping configurations are valid
+  - ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
