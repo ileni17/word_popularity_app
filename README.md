@@ -8,7 +8,7 @@ as a ratio of positive results to the total number of results.
 
 1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/)
 2. [Install Docker Desktop](https://www.docker.com/products/docker-desktop/) to easily access docker images
-3. Clone project to your local machine and run `docker compose up` (the logs will be displayed in the current shell) in the root folder
+3. Clone project to your local machine and run `docker compose up -d` (the logs will be displayed in the current shell) in the root folder
 
 ## Basic guidelines
 
@@ -62,7 +62,7 @@ Example: `https://localhost/api/v2/score?ter`:
 ## PHPUnit test
 There is currently only one test in the app that asserts GitHub API get request.
 
-Run the test by executing command `php bin/phpunit` inside php container.
+Run the test by executing command `php bin/phpunit` inside Docker php container.
 
 ## OAuth2
 
