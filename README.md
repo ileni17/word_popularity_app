@@ -79,3 +79,7 @@ In order to access Facebook data of the user that wants to authenticate,
 
 There is OpenApi 3 project specification available in the json format on the following url:
 `https://localhost/api/doc.json`
+
+## Travis CI
+
+Travis CI configuration file can be found in the root folder under the name `.travis.yml`.
