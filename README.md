@@ -62,7 +62,7 @@ Example: `https://localhost/api/v2/score?ter`:
 ## PHPUnit test
 There is currently only one test in the app that asserts GitHub API get request and its content.
 
-Run the test by executing command `php bin/phpunit` inside Docker php container.
+Run the test by executing command `php bin/phpunit` inside Docker php container or `docker compose exec php bin/phpunit` in the CLI in the project root.
 
 ## OAuth2
 
